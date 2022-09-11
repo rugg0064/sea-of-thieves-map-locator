@@ -57,13 +57,11 @@ def prepImage(image):
                 bottom = midpoint
     print(f'Settled on contrast {bottom}')
     returnImage = grayscaleAverageContrast(img, min(255, midpoint + 5))
-    returnImage.save('./image1.png')
     #returnImage = returnImage.convert('RGB')
     skimageImage = numpy.array(returnImage)
     for i in range(3):
         skimageImage = skimage.morphology.closing(skimageImage, footprint = skimage.morphology.ball(4))
     returnImage = Image.fromarray(skimageImage)
-    returnImage.save('./image2.png')
     return returnImage
 
 def alternateComparison(img1, img2, printer):
@@ -83,14 +81,13 @@ def scriptMain(imagePath):
     img = prepImage(img)
     img = normalizeTo256(img)
     img = grayscaleAverageContrast(img, 128)
-    img.save('./image3.png')
     if(img is None):
         print("Couldn't prep image.")
         exit()
     hash = imagehash.average_hash(img)
     min = 9999999
     minName = ''
-    path = './newContrasts/'
+    path = './normalizedImages/'
     for root, dirs, files in os.walk(path):
         for file in files:
             imagePath = path + file
@@ -107,5 +104,3 @@ def scriptMain(imagePath):
 
 if __name__ == '__main__':
     scriptMain(sys.argv[1])
-    #for i in range(1,11):
-    #    scriptMain(f'./mapSamples/image{i}.png')
